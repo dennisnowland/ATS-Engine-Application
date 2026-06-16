@@ -1,0 +1,251 @@
+⭐ ATS MASTER RULE BACKUP (COMPARE + SUBMISSIONS + FAILURES + INTERVIEWS)
+Version: 16 June 2026 — Full System Snapshot
+🧠 1. COMPARE RULE (Primary Engine)
+This rule runs automatically whenever you paste a job description or URL.
+
+1.1 Extract Job Metadata
+Extract Role, Company, Location, Salary, Mode, Type, Agency, Source
+
+Normalise text (lowercase, strip symbols, remove noise)
+
+1.2 Fit Score Calculation
+Score based on match between job spec and your skills:
+
+Category	Weight
+PHP / Laravel / C# / .NET	+20
+Python / AI / LLM tools	+10
+AWS / Azure / Cloud	+10
+CI/CD / DevOps	+10
+SaaS / Product-led	+10
+High-traffic systems	+10
+Agile / Delivery	+5
+Remote / Hybrid	+3
+SC Clearance	+2
+AI-first / AI tooling	+5
+
+
+Final Score = 0–100%
+
+1.3 Table Routing
+Score ≥ 93% → Main Table
+
+Score < 93% → Under93 Table
+
+1.4 Duplicate Detection
+If a job with the same Company + Role exists in either table:
+
+Increment Duplicates count
+
+Do NOT create a new row
+
+Update status if needed
+
+1.5 CV Selection
+The engine automatically selects the best CV:
+
+Role Type	CV Used
+PHP / Laravel / SaaS	Senior PHP Developer CV
+C# / .NET / Backend	C# Developer CV
+Senior Engineer / Tech Lead	Senior Developer CV
+Engineering Manager	Engineering Manager CV
+Agile Coach	Agile Coach CV
+Scrum Master	Scrum Master CV
+TPM	TPM CV
+PMO	PMO CV
+Delivery Manager	Delivery CV
+
+
+1.6 Auto‑Generated Notes
+Summary of match
+
+Strengths
+
+Gaps
+
+CV chosen
+
+Any special conditions (travel, hybrid, clearance)
+
+1.7 Status
+New job → To Review
+
+Score ≥ 93% → High Priority
+
+Score < 93% → Low Priority
+
+1.8 Auto‑Add Missing Roles
+If a job is not found in the main table:
+
+Add new row
+
+Set Status = To Review
+
+Set Notes = Started Compare Rule
+
+🧠 2. SUBMISSION RULE
+Triggered when you paste an email or message confirming you applied.
+
+2.1 Duplicate Check
+If job exists → update status
+
+If not → create new entry in Under93 Table
+
+2.2 Status Update
+Set Status = Submitted
+
+2.3 Notes
+“Submission recorded”
+
+Add timestamp
+
+Add source (LinkedIn, Indeed, etc.)
+
+2.4 Auto‑Increment Duplicate Count
+If multiple submissions for same job:
+
+Increase Duplicates field
+
+🧠 3. FAILURE RULE
+Triggered when you paste a rejection email.
+
+3.1 Duplicate Check
+If job exists → update
+
+If not → create new entry in Under93
+
+3.2 Status Update
+Set Status = Rejected
+
+3.3 Notes
+“Rejection recorded”
+
+Add timestamp
+
+Add source + agency
+
+3.4 Auto‑Mark in Main Table
+If job was in Main Table:
+
+Keep it there
+
+Mark as Refused (your rule)
+
+🧠 4. INTERVIEW RULE
+Triggered when you paste an interview invite.
+
+4.1 Duplicate Check
+If job exists → update
+
+If not → create new entry in Main Table
+
+4.2 Status Update
+Set Status = Interviewing
+
+4.3 Notes
+“Started Interview Stage”
+
+Add timestamp
+
+Add interview date/time if detected
+
+4.4 Auto‑Promote
+If job was in Under93:
+
+Move to Main Table
+
+Set Fit = 93% (minimum threshold)
+
+Notes = “Started Interview Stage”
+
+🧠 5. FAILURES.CSV & INTERVIEWS.CSV MATCHING RULE
+When you import CSVs:
+
+5.1 Failures.csv
+Match by Company + Role
+
+Mark App Status = Refused
+
+Add note “Matched via Failures.csv”
+
+5.2 Interviews.csv
+Match by Company + Role
+
+Mark App Status = Interviewed
+
+Add note “Matched via Interviews.csv”
+
+🧠 6. UNDER93 RULE
+Any job scoring below 93%:
+
+Must be added to Under93 Table
+
+Must NOT appear in Main Table
+
+Must include note: “Under 93 Rule Applied”
+
+🧠 7. AUTO‑GENERATE COVER LETTER RULE
+If Fit Score ≥ 93%:
+
+Automatically generate a tailored cover letter
+
+Use the CV selected by Compare Rule
+
+Add note: “Cover letter generated automatically”
+
+🧠 8. DAILY SUMMARY RULE
+Every action logs:
+
+Timestamp
+
+Action (Job Added, Submission, Failure, Interview)
+
+Company + Role
+
+Fit Score
+
+Table used
+
+CV chosen
+
+Saved to:
+daily_summary.log
+
+🧠 9. BEST CV OUTPUT RULE
+Every Compare Rule run must output:
+
+“Best CV to use:”
+
+The exact CV filename
+
+Reason why it was chosen
+
+🧠 10. AUTO‑ADD MISSING INTERVIEW ENTRIES
+If an interview email is detected but no job exists:
+
+Create new job entry
+
+Set Fit = 93%
+
+Set Status = Interviewing
+
+Add note: “Interview detected before job entry — auto‑created”
+
+🧠 11. AUTO‑DETECT JOB URL RULE
+If you paste a URL:
+
+Fetch job description
+
+Run Compare Rule
+
+Score it
+
+Add to correct table
+
+Output best CV
+
+Generate cover letter if ≥ 93%
+
+🧠 12. ALWAYS RUN COMPARE RULE ON EVERY JOB URL
+This is a persistent rule you set:
+
+“Always run the Compare Rule scoring on every job URL pointing to a job description.”
