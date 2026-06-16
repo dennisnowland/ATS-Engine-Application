@@ -79,7 +79,7 @@ dotnet run
 ---
 
 ## Fit Score Weights
-
+The Fit Score Weights is driven by the job spec that is being checked so is automated and behind the scenes and then it used against a given resume in this case an array of resumes.
 | Category | Weight |
 |----------|--------|
 | PHP / Laravel / C# / .NET | +20 |
