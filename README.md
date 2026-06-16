@@ -2,6 +2,7 @@
 **Version:** 1.0.0 — 16 June 2026
 
 A full C# console application implementing all 12 rules from the ATS Master Rule Backup.
+For the best document for detail the please read the ATS ENGINE HLD.docx file the gives a High level over view of the system and what is needed in order to run it.
 
 ---
 
